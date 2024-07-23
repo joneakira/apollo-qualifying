@@ -1,0 +1,35 @@
+{
+    "accounts": [
+        {
+            "id": 1,
+            "owner": "Alice",
+            "email": "alice@email.com",
+            "initialBalance": 5000
+        },
+        {
+            "id": 2,
+            "owner": "Bob",
+            "email": "bob@email.com",
+            "initialBalance": 3000
+        },
+        {
+            "id": 3,
+            "owner": "João",
+            "email": "joao@email.com",
+            "initialBalance": 0
+        },
+        {
+            "id": 4,
+            "owner": "Ana",
+            "email": "ana@email.com",
+            "initialBalance": 5432.28
+        },
+        {
+            "id": 5,
+            "owner": "Carlos",
+            "email": "carlos@email.com",
+            "initialBalance": 100.32
+        }
+    ],
+    "transactions": []
+}
