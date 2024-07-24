@@ -61,6 +61,7 @@ const AccountsTable: React.FC<IProps> = (props) => {
   const isLoading = useMemo(() => {
     return isFetching > 0;
   }, [isFetching]);
+
   return (
     <Flex
       style={{

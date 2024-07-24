@@ -5,13 +5,14 @@ import { Account } from "./interfaces/account";
 import { Header } from "./components/header";
 import AccountTable from "./components/Accounts/Table";
 import { Outlet } from "react-router-dom";
+import instance from "./api/instance";
 
 function App() {
   const { data, error } = useQuery<Account[]>({
     queryKey: ["accounts"],
     queryFn: async () => {
-      const response = await axios
-        .get<Account[]>("http://localhost:5000/accounts")
+      const response = await instance
+        .get<Account[]>("accounts")
         .then((res) => res.data);
       return response;
     },

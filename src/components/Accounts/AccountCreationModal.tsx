@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { Account } from "../../interfaces/account";
 import { accountFormInputStyles } from "../../styles/accountForm";
 import { currencyFormatter } from "../../utils/currencyFormatter";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 interface AccountCreationModalProps {}
 
@@ -22,6 +24,7 @@ const AccountCreationModal: React.FC<AccountCreationModalProps> = () => {
     control,
     handleSubmit,
     formState: { errors },
+    ...hookForm
   } = useForm<Account>({
     defaultValues: {
       owner: "",
@@ -30,8 +33,15 @@ const AccountCreationModal: React.FC<AccountCreationModalProps> = () => {
     },
   });
 
+  const mutation = useMutation({
+    mutationFn: (newTodo) => {
+      return axios.post("/todos", newTodo);
+    },
+  });
+
   const onSubmit = (data: Account) => {
     console.log("User Registered:", data);
+
     notification.success({
       message: "User Registered",
       description: (
@@ -59,13 +69,21 @@ const AccountCreationModal: React.FC<AccountCreationModalProps> = () => {
                 justifyContent: "flex-end",
               }}
             >
-              <Button type="primary" danger>
+              <Button type="primary" danger onClick={() => navigate("/")}>
                 Cancel
               </Button>
 
-              <Button type="primary" htmlType="submit">
-                Create
-              </Button>
+              <Form.Item style={{ marginBottom: 0 }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={() =>
+                    handleSubmit(() => onSubmit(hookForm.getValues()))()
+                  }
+                >
+                  Create
+                </Button>
+              </Form.Item>
             </Space>,
           ]}
         >
