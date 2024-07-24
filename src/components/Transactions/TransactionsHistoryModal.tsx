@@ -37,6 +37,7 @@ const TransactionsHistoryModal: React.FC<
     }
     return [];
   }, [account, transactions]);
+
   const accountOutcomeTransactions = useMemo(() => {
     if (account && transactions) {
       return transactions.filter(
@@ -68,11 +69,28 @@ const TransactionsHistoryModal: React.FC<
               <List.Item.Meta
                 title={
                   <Typography.Text>
-                    {item.accountId === account?.id ? <b>To:</b> : <b>From:</b>}{" "}
+                    {accountOutcomeTransactions.some(
+                      (t) => t.id === item.id
+                    ) ? (
+                      <b>To:</b>
+                    ) : (
+                      <b>From:</b>
+                    )}{" "}
                     {item.targetEmail}
                   </Typography.Text>
                 }
-                description={`Amount: $${item.amount}`}
+                description={
+                  <Typography.Text
+                    style={{}}
+                    type={
+                      accountOutcomeTransactions.some((t) => t.id === item.id)
+                        ? "danger"
+                        : "success"
+                    }
+                  >
+                    {`${item.date}: $${item.amount}`}
+                  </Typography.Text>
+                }
               />
             </List.Item>
           )}

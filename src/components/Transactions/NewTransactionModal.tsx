@@ -31,28 +31,31 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
   const [transaction, setTransaction] = useRecoilState(
     recoilTransactionAccounts
   );
-  const targetAccount = useMemo(() => {
-    return accounts.find((ac) => ac.email === transaction?.targetEmail);
-  }, [accounts, transaction?.targetEmail]);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<Transaction>({
     defaultValues: {
       originEmail: undefined,
-      targetEmail: targetAccount?.email,
+      targetEmail: transaction?.targetEmail,
       amount: 0,
     },
   });
 
-  const originEmail = watch("originEmail");
+  const originEmailWatcher = watch("originEmail");
+  const targetEmailWatcher = watch("targetEmail");
+
+  const targetAccount = useMemo(() => {
+    return accounts.find((ac) => ac.email === targetEmailWatcher);
+  }, [accounts, targetEmailWatcher]);
 
   const originAccount = useMemo(() => {
-    return accounts.find((ac) => ac.email === originEmail);
-  }, [accounts, originEmail]);
+    return accounts.find((ac) => ac.email === originEmailWatcher);
+  }, [accounts, originEmailWatcher]);
 
   const mutation = useMutation({
     mutationFn: async (transaction: Transaction) => {
@@ -88,6 +91,7 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
         message: "Transaction Successful",
         description: "The transaction was completed successfully.",
       });
+
       navigate("/");
     },
     onError: (error) => {
