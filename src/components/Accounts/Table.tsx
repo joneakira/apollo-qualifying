@@ -20,7 +20,12 @@ const columns: TableProps<Account>["columns"] = [
     title: "Name",
     dataIndex: "owner",
     key: "owner",
-    render: (text) => <a>{text}</a>,
+    render: (text, record) => (
+      <Space style={{ flexDirection: "column", alignItems: "left" }}>
+        <Typography.Text>{text}</Typography.Text>
+        <Typography.Link>{record.email}</Typography.Link>
+      </Space>
+    ),
   },
   {
     title: "e-mail",

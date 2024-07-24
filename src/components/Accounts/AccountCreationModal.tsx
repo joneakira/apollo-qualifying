@@ -1,6 +1,5 @@
 import {
   Button,
-  Flex,
   Form,
   Input,
   InputNumber,
@@ -8,18 +7,24 @@ import {
   notification,
   Space,
 } from "antd";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, SubmitErrorHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Account } from "../../interfaces/account";
 import { accountFormInputStyles } from "../../styles/accountForm";
 import { currencyFormatter } from "../../utils/currencyFormatter";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { endpoints } from "../../api/endpoints";
+import apiInstance from "../../api/instance";
+import { accountsQueryKey, queryClient } from "../../services/queryclient";
 
 interface AccountCreationModalProps {}
 
 const AccountCreationModal: React.FC<AccountCreationModalProps> = () => {
   const navigate = useNavigate();
+
+  const queryData: Account[] =
+    queryClient.getQueryData([accountsQueryKey]) || [];
+
   const {
     control,
     handleSubmit,
@@ -34,58 +39,65 @@ const AccountCreationModal: React.FC<AccountCreationModalProps> = () => {
   });
 
   const mutation = useMutation({
-    mutationFn: (newTodo) => {
-      return axios.post("/todos", newTodo);
+    mutationFn: (account: Account) => {
+      return apiInstance.post(endpoints.accounts, account);
+    },
+
+    onSuccess: (data) => {
+      queryClient.setQueryData(["accounts"], (oldData: any) => {
+        if (oldData) {
+          return [...oldData, data];
+        }
+        return [data];
+      });
+
+      notification.success({
+        message: "User Registered",
+        description: (
+          <>
+            User <b>{hookForm.getValues("owner")}</b> -{" "}
+            <b>{hookForm.getValues("email")}</b> has been registered
+            successfully.
+          </>
+        ),
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 300);
+    },
+    onError: (error) => {
+      console.error("Error registering user:", error);
+      notification.error({
+        message: "Registration Failed",
+        description: "An error occurred while registering the user.",
+      });
     },
   });
 
-  const onSubmit = (data: Account) => {
-    console.log("User Registered:", data);
+  const onSubmit = (account: Account) => {
+    if (queryData.find((dbAccount) => dbAccount.email === account.email)) {
+      notification.warning({
+        message: "Registration Failed",
+        description: "e-mail already binded to another user.",
+      });
+      return;
+    }
 
-    notification.success({
-      message: "User Registered",
-      description: (
-        <>
-          User <b>{data.owner}</b> - <b>{data.email}</b> has been registered
-          successfully.
-        </>
-      ),
-    });
+    mutation.mutate({ ...account, balance: account.initialBalance });
   };
+
   return (
     <>
-      <Form
-        onFinish={handleSubmit(onSubmit)}
-        labelCol={{ span: 6 }}
-        layout="horizontal"
+      <Modal
+        open
+        title="New Account"
+        onCancel={() => navigate("/")}
+        footer={[<></>]}
       >
-        <Modal
-          open
-          title="New Account"
-          onCancel={() => navigate("/")}
-          footer={[
-            <Space
-              style={{
-                justifyContent: "flex-end",
-              }}
-            >
-              <Button type="primary" danger onClick={() => navigate("/")}>
-                Cancel
-              </Button>
-
-              <Form.Item style={{ marginBottom: 0 }}>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={() =>
-                    handleSubmit(() => onSubmit(hookForm.getValues()))()
-                  }
-                >
-                  Create
-                </Button>
-              </Form.Item>
-            </Space>,
-          ]}
+        <Form
+          onFinish={handleSubmit(onSubmit)}
+          labelCol={{ span: 6 }}
+          layout="horizontal"
         >
           <Form.Item
             label="Owner"
@@ -97,7 +109,7 @@ const AccountCreationModal: React.FC<AccountCreationModalProps> = () => {
               control={control}
               rules={{ required: "Owner is required" }}
               render={({ field }) => (
-                <Input style={accountFormInputStyles} {...field} />
+                <Input style={accountFormInputStyles} autoFocus {...field} />
               )}
             />
           </Form.Item>
@@ -139,8 +151,24 @@ const AccountCreationModal: React.FC<AccountCreationModalProps> = () => {
               )}
             />
           </Form.Item>
-        </Modal>
-      </Form>
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Space
+              style={{
+                width: "100%",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button type="primary" danger onClick={() => navigate("/")}>
+                Cancel
+              </Button>
+
+              <Button type="primary" htmlType="submit">
+                Create
+              </Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 };
