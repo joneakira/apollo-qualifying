@@ -6,6 +6,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./services/queryclient";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AccountCreationModal from "./components/Accounts/AccountCreationModal";
+import { RecoilRoot } from "recoil";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <RecoilRoot>
+        <RouterProvider router={router} />
+      </RecoilRoot>
     </QueryClientProvider>
   </React.StrictMode>
 );

@@ -14,13 +14,9 @@ import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { accountsQueryKey, queryClient } from "../../services/queryclient";
 import { Account } from "../../interfaces/account";
+import { Transaction } from "../../interfaces/transaction";
 
 interface NewTransactionModalProps {}
-interface TransactionFormData {
-  fromAccountEmail: string;
-  toAccountEmail: string;
-  amount: number;
-}
 
 const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
   const navigate = useNavigate();
@@ -29,18 +25,19 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<TransactionFormData>({
+  } = useForm<Transaction>({
     defaultValues: {
-      fromAccountEmail: undefined,
-      toAccountEmail: undefined,
+      originEmail: undefined,
+      targetEmail: undefined,
       amount: 0,
     },
   });
 
   const accounts: Account[] =
     queryClient.getQueryData([accountsQueryKey]) || [];
+
   const mutation = useMutation({
-    mutationFn: (transaction: TransactionFormData) => {
+    mutationFn: async (transaction: Transaction) => {
       return apiInstance
         .post(endpoints.transactions, transaction)
         .then((res) => res.data);
@@ -52,13 +49,13 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
           if (!oldData) return oldData;
 
           return oldData.map((account) => {
-            if (account.email === variables.fromAccountEmail) {
+            if (account.email === variables.originEmail) {
               return {
                 ...account,
                 balance: account.balance - variables.amount,
               };
             }
-            if (account.email === variables.toAccountEmail) {
+            if (account.email === variables.targetEmail) {
               return {
                 ...account,
                 balance: account.balance + variables.amount,
@@ -84,7 +81,7 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
     },
   });
 
-  const onSubmit = (data: TransactionFormData) => {
+  const onSubmit = (data: Transaction) => {
     mutation.mutate(data);
   };
   return (
@@ -101,11 +98,11 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
       >
         <Form.Item
           label="From Account"
-          validateStatus={errors.fromAccountEmail ? "error" : ""}
-          help={errors.fromAccountEmail?.message}
+          validateStatus={errors.originEmail ? "error" : ""}
+          help={errors.originEmail?.message}
         >
           <Controller
-            name="fromAccountEmail"
+            name="originEmail"
             control={control}
             rules={{ required: "From Account is required" }}
             render={({ field }) => (
@@ -121,11 +118,11 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
         </Form.Item>
         <Form.Item
           label="To Account"
-          validateStatus={errors.toAccountEmail ? "error" : ""}
-          help={errors.toAccountEmail?.message}
+          validateStatus={errors.targetEmail ? "error" : ""}
+          help={errors.targetEmail?.message}
         >
           <Controller
-            name="toAccountEmail"
+            name="targetEmail"
             control={control}
             rules={{ required: "To Account is required" }}
             render={({ field }) => (
