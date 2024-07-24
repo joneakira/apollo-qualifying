@@ -19,7 +19,6 @@ function App() {
         .then((res) => res.data);
       return response;
     },
-    refetchOnMount: false,
   });
   const { data: transactionsData, error: transactionsError } = useQuery<
     Transaction[]
