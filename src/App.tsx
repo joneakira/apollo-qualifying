@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { List, Button, Layout } from "antd";
+import { Layout } from "antd";
 import { Account } from "./interfaces/account";
 import { Header } from "./components/header";
 import AccountTable from "./components/Accounts/Table";
@@ -17,12 +17,11 @@ function App() {
     },
   });
 
-  if (isLoading) return "Loading...";
   if (error) return "An error has occurred: " + error.message;
   return (
     <>
       <Layout className="App" style={{ alignItems: "center", width: "100%" }}>
-        <Header title="Qualifying" buttonLabel="New user" />
+        <Header title="J. Akira Qualifying" buttonLabel="New user" />
         <AccountTable accounts={data ?? []} />
       </Layout>
       <Outlet />

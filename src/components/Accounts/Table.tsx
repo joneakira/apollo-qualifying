@@ -3,6 +3,10 @@ import { Account } from "../../interfaces/account";
 import AccountTableRow from "./Row";
 import { tableStyles } from "../../styles/table";
 import { SendOutlined } from "@ant-design/icons";
+import { useIsFetching } from "@tanstack/react-query";
+import { accountsQueryKey } from "../../services/queryclient";
+import { useMemo } from "react";
+import { currencyFormatter } from "../../utils/currencyFormatter";
 
 interface IProps {
   accounts: Account[];
@@ -23,6 +27,7 @@ const columns: TableProps<Account>["columns"] = [
     title: "Balance",
     dataIndex: "balance",
     key: "balance",
+    render: (balance) => <b>{currencyFormatter(balance)}</b>,
   },
   {
     title: "Initial Balance",
@@ -43,8 +48,19 @@ const columns: TableProps<Account>["columns"] = [
 ];
 const AccountsTable: React.FC<IProps> = (props) => {
   const { accounts } = props;
+  const isFetching = useIsFetching({ queryKey: [accountsQueryKey] });
 
-  return <Table dataSource={accounts} columns={columns} style={tableStyles} />;
+  const isLoading = useMemo(() => {
+    return isFetching > 0;
+  }, [isFetching]);
+  return (
+    <Table
+      loading={isLoading}
+      dataSource={accounts}
+      columns={columns}
+      style={tableStyles}
+    />
+  );
 };
 
 export default AccountsTable;
