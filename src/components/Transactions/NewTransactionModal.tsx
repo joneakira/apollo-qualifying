@@ -100,9 +100,12 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
   });
 
   const onSubmit = (data: Transaction) => {
-    setTransaction({
+    const formattedData = {
       ...data,
-    });
+      accountId: originAccount?.id,
+      date: new Date().toLocaleString(),
+    };
+    setTransaction(formattedData);
     if (originAccount?.balance && originAccount.balance < data.amount) {
       notification.warning({
         message: "Transaction Failed",
@@ -117,7 +120,7 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
       });
       return;
     }
-    mutation.mutate(data);
+    mutation.mutate(formattedData);
   };
   return (
     <Modal

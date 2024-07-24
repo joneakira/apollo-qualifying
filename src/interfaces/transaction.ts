@@ -4,6 +4,6 @@ export interface Transaction {
   originEmail?: string;
   targetEmail?: string;
   amount: number;
-  date?: string;
+  date: string;
   description?: string;
 }

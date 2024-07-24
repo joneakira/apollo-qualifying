@@ -18,7 +18,7 @@ import { useIsFetching } from "@tanstack/react-query";
 import { accountsQueryKey } from "../../services/queryclient";
 import { useEffect, useMemo, useState } from "react";
 import { currencyFormatter } from "../../utils/currencyFormatter";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import React from "react";
 import NewTransactionModal from "../Transactions/NewTransactionModal";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -37,11 +37,14 @@ const BeginTransaction = ({
 }) => {
   const setTransaction = useSetRecoilState(recoilTransactionAccounts);
   const setTargetEmail = () => {
-    // console.log(account);
     setTransaction((prev) =>
       prev
         ? { ...prev, targetEmail: account.email }
-        : { targetEmail: account.email, amount: 0 }
+        : {
+            targetEmail: account.email,
+            amount: 0,
+            date: new Date().toLocaleTimeString(),
+          }
     );
   };
   return mobile ? (
@@ -58,6 +61,16 @@ const BeginTransaction = ({
     </Button>
   );
 };
+const OpenAccountHistoryLink = ({ account }: { account: Account }) => {
+  const navigate = useNavigate();
+  return (
+    <Typography.Link
+      onClick={() => navigate("/transaction?accountId=" + account.id)}
+    >
+      {account.owner}
+    </Typography.Link>
+  );
+};
 const columns: TableProps<Account>["columns"] = [
   {
     title: "Name",
@@ -65,7 +78,7 @@ const columns: TableProps<Account>["columns"] = [
     key: "owner",
     render: (text, record) => (
       <Space style={{ flexDirection: "column", alignItems: "flex-start" }}>
-        <Typography.Link>{text}</Typography.Link>
+        <OpenAccountHistoryLink account={record} />
         <Typography.Text>{record.email}</Typography.Text>
       </Space>
     ),
@@ -92,6 +105,7 @@ const columns: TableProps<Account>["columns"] = [
   {
     title: "Actions",
     dataIndex: "to",
+    key: "to",
     render: (_, record) => <BeginTransaction mobile account={record} />,
     responsive: ["xs"],
   },
@@ -105,14 +119,19 @@ const AccountsTable: React.FC<IProps> = (props) => {
     recoilTransactionAccounts
   );
   const navigate = useNavigate();
+  const location = useLocation();
   const isFetching = useIsFetching({ queryKey: [accountsQueryKey] });
 
   const isLoading = useMemo(() => {
     return isFetching > 0;
   }, [isFetching]);
-  useEffect(() => {
-    console.log(transaction);
-  }, [transaction]);
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const targetEmail = params.get("targetEmail");
+  //   if (targetEmail) {
+  //     setTransaction((prev) => (prev ? { ...prev, targetEmail } : { targetEmail, amount: 0 }));
+  //   }
+  // }, [location.search, setTransaction]);
 
   return (
     <Flex

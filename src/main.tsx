@@ -7,6 +7,7 @@ import { queryClient } from "./services/queryclient";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AccountCreationModal from "./components/Accounts/AccountCreationModal";
 import { RecoilRoot } from "recoil";
+import TransactionsHistoryModal from "./components/Transactions/TransactionsHistoryModal";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,14 @@ const router = createBrowserRouter([
           </>
         ),
         path: "/create-account",
+      },
+      {
+        element: (
+          <>
+            <TransactionsHistoryModal />
+          </>
+        ),
+        path: "/transaction",
       },
     ],
   },

@@ -6,6 +6,9 @@ import { Header } from "./components/header";
 import AccountTable from "./components/Accounts/Table";
 import { Outlet } from "react-router-dom";
 import apiInstance from "./api/instance";
+import { Transaction } from "./interfaces/transaction";
+import { endpoints } from "./api/endpoints";
+import { transactionsQueryKey } from "./services/queryclient";
 
 function App() {
   const { data, error } = useQuery<Account[]>({
@@ -16,6 +19,19 @@ function App() {
         .then((res) => res.data);
       return response;
     },
+    refetchOnMount: false,
+  });
+  const { data: transactionsData, error: transactionsError } = useQuery<
+    Transaction[]
+  >({
+    queryKey: [transactionsQueryKey],
+    queryFn: async () => {
+      const response = await apiInstance
+        .get<Transaction[]>(endpoints.transactions)
+        .then((res) => res.data);
+      return response;
+    },
+    refetchOnMount: false,
   });
 
   if (error) return "An error has occurred: " + error.message;
