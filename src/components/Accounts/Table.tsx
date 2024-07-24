@@ -50,17 +50,6 @@ const columns: TableProps<Account>["columns"] = [
     render: (balance) => <b>{currencyFormatter(balance)}</b>,
   },
   {
-    title: "From To",
-    render: (record) => (
-      <React.Fragment>
-        {record.from}
-        <br />
-        {record.to}
-      </React.Fragment>
-    ),
-    responsive: ["xs"],
-  },
-  {
     title: "Actions",
     key: "from",
     render: (_, record) => (
@@ -70,7 +59,7 @@ const columns: TableProps<Account>["columns"] = [
         </Button>
       </Space>
     ),
-    responsive: ["lg"],
+    responsive: ["sm"],
   },
   {
     title: "Actions",
