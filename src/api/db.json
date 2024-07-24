@@ -110,6 +110,12 @@
       "originEmail": "ana@email.com",
       "targetEmail": "bob@email.com",
       "amount": 5432.28
+    },
+    {
+      "id": "ff0c",
+      "originEmail": "alice@email.com",
+      "targetEmail": "ana@email.com",
+      "amount": 4
     }
   ]
 }

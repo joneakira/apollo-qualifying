@@ -65,8 +65,8 @@ const columns: TableProps<Account>["columns"] = [
     key: "owner",
     render: (text, record) => (
       <Space style={{ flexDirection: "column", alignItems: "flex-start" }}>
-        <Typography.Text>{text}</Typography.Text>
-        <Typography.Link>{record.email}</Typography.Link>
+        <Typography.Link>{text}</Typography.Link>
+        <Typography.Text>{record.email}</Typography.Text>
       </Space>
     ),
   },
