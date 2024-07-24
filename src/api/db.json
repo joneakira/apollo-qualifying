@@ -52,142 +52,60 @@
   ],
   "transactions": [
     {
-      "id": "b651",
-      "originEmail": "2",
-      "targetEmail": "3",
-      "amount": 10
-    },
-    {
-      "id": "dfca",
-      "originEmail": "ana@email.com",
-      "targetEmail": "Alice - alice@email.com",
-      "amount": 5000
-    },
-    {
-      "id": "c04d",
-      "originEmail": "alice@email.com",
-      "targetEmail": "Bob - bob@email.com",
-      "amount": 100
-    },
-    {
-      "id": "82f8",
-      "originEmail": "bob@email.com",
-      "targetEmail": "alice@email.com",
-      "amount": 399
-    },
-    {
-      "id": "8e0f",
-      "originEmail": "ana@email.com",
-      "targetEmail": "alice@email.com",
-      "amount": 435
-    },
-    {
-      "id": "68b6",
-      "originEmail": "bob@email.com",
-      "targetEmail": "joao@email.com",
-      "amount": 0
-    },
-    {
-      "id": "364a",
-      "originEmail": "bob@email.com",
-      "targetEmail": "joao@email.com",
-      "amount": 0
-    },
-    {
-      "id": "d3fe",
-      "originEmail": "bob@email.com",
-      "targetEmail": "joao@email.com",
-      "amount": 0
-    },
-    {
-      "id": "d8f2",
-      "originEmail": "bob@email.com",
-      "targetEmail": "joao@email.com",
-      "amount": 0
-    },
-    {
-      "id": "d479",
-      "originEmail": "ana@email.com",
-      "targetEmail": "bob@email.com",
-      "amount": 5432.28
-    },
-    {
-      "id": "ff0c",
-      "originEmail": "alice@email.com",
-      "targetEmail": "ana@email.com",
-      "amount": 4
-    },
-    {
-      "id": "e90f",
-      "originEmail": "ana@email.com",
-      "targetEmail": "alice@email.com",
-      "amount": 4
-    },
-    {
-      "id": "1427",
-      "originEmail": "ana@email.com",
-      "targetEmail": "alice@email.com",
-      "amount": 4
-    },
-    {
-      "id": "bd85",
-      "originEmail": "ana@email.com",
-      "targetEmail": "alice@email.com",
-      "amount": 4
-    },
-    {
-      "id": "d0b7",
-      "originEmail": "ana@email.com",
-      "targetEmail": "alice@email.com",
-      "amount": 4
-    },
-    {
-      "id": "f20d",
-      "originEmail": "ana@email.com",
-      "targetEmail": "bob@email.com",
-      "amount": 10,
-      "accountId": "4",
-      "date": "1,721,843,224,819"
-    },
-    {
-      "id": "2aa4",
-      "originEmail": "ana@email.com",
-      "targetEmail": "bob@email.com",
-      "amount": 10,
-      "accountId": "4",
-      "date": "7/24/2024, 2:47:46 PM"
-    },
-    {
-      "id": "de49",
-      "originEmail": "admin@gmail.com",
-      "targetEmail": "ana@email.com",
-      "amount": 1000000,
-      "accountId": "4278",
-      "date": "7/24/2024, 2:54:03 PM"
-    },
-    {
-      "id": "581b",
-      "originEmail": "admin@gmail.com",
-      "targetEmail": "bob@email.com",
-      "amount": 20000,
-      "accountId": "4278",
-      "date": "7/24/2024, 2:55:22 PM"
-    },
-    {
-      "id": "54e2",
+      "id": "25fd",
       "originEmail": "admin@gmail.com",
       "targetEmail": "alice@email.com",
-      "amount": 5,
+      "amount": 1000,
       "accountId": "4278",
-      "date": "7/24/2024, 3:01:20 PM"
+      "date": "7/24/2024, 3:06:35 PM"
     },
     {
-      "id": "4b4f",
+      "id": "970e",
       "originEmail": "admin@gmail.com",
       "targetEmail": "alice@email.com",
-      "amount": 8,
+      "amount": 1000,
       "accountId": "4278",
-      "date": "7/24/2024, 3:01:24 PM"
+      "date": "7/24/2024, 3:06:35 PM"
+    },
+    {
+      "id": "8b96",
+      "originEmail": "admin@gmail.com",
+      "targetEmail": "alice@email.com",
+      "amount": 1000,
+      "accountId": "4278",
+      "date": "7/24/2024, 3:06:36 PM"
+    },
+    {
+      "id": "f471",
+      "originEmail": "admin@gmail.com",
+      "targetEmail": "alice@email.com",
+      "amount": 100,
+      "accountId": "4278",
+      "date": "7/24/2024, 3:13:06 PM"
+    },
+    {
+      "id": "4604",
+      "originEmail": "admin@gmail.com",
+      "targetEmail": "alice@email.com",
+      "amount": 100,
+      "accountId": "4278",
+      "date": "7/24/2024, 3:13:06 PM"
+    },
+    {
+      "id": "b685",
+      "originEmail": "admin@gmail.com",
+      "targetEmail": "alice@email.com",
+      "amount": 100,
+      "accountId": "4278",
+      "date": "7/24/2024, 3:13:07 PM"
+    },
+    {
+      "id": "5415",
+      "originEmail": "admin@gmail.com",
+      "targetEmail": "alice@email.com",
+      "amount": 100,
+      "accountId": "4278",
+      "date": "7/24/2024, 3:13:08 PM"
     }
   ]
 }

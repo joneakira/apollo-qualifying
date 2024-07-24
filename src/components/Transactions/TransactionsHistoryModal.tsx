@@ -8,6 +8,7 @@ import {
 import { useMemo } from "react";
 import { Transaction } from "../../interfaces/transaction";
 import { Account } from "../../interfaces/account";
+import { currencyFormatter } from "../../utils/currencyFormatter";
 
 interface TransactionsHistoryModalProps {}
 
@@ -48,19 +49,18 @@ const TransactionsHistoryModal: React.FC<
   }, [account, transactions]);
 
   const transactionsResult = useMemo(() => {
-    return accountIncomeTransactions
-      .concat(accountOutcomeTransactions)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return accountIncomeTransactions.concat(accountOutcomeTransactions);
   }, [accountOutcomeTransactions, accountIncomeTransactions]);
 
   return (
     <>
       <Modal
         open
-        title={`Transactions history: ${account?.email}`}
+        title={"Transactions"}
         onCancel={() => navigate("/")}
         footer={null}
       >
+        <Typography.Text>{account?.email}</Typography.Text>
         <List
           itemLayout="horizontal"
           dataSource={transactionsResult}
@@ -76,22 +76,21 @@ const TransactionsHistoryModal: React.FC<
                     ) : (
                       <b>From:</b>
                     )}{" "}
-                    {item.targetEmail}
+                    {item.originEmail}
                   </Typography.Text>
                 }
-                description={
-                  <Typography.Text
-                    style={{}}
-                    type={
-                      accountOutcomeTransactions.some((t) => t.id === item.id)
-                        ? "danger"
-                        : "success"
-                    }
-                  >
-                    {`${item.date}: $${item.amount}`}
-                  </Typography.Text>
-                }
+                description={<Typography.Text>{item.date}</Typography.Text>}
               />
+              <Typography.Text
+                style={{}}
+                type={
+                  accountIncomeTransactions.some((t) => t.id === item.id)
+                    ? "danger"
+                    : "success"
+                }
+              >
+                {`${currencyFormatter(item.amount)}`}
+              </Typography.Text>
             </List.Item>
           )}
         />

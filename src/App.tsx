@@ -31,7 +31,6 @@ function App() {
         .then((res) => res.data);
       return response;
     },
-    refetchOnMount: false,
   });
 
   if (error) return "An error has occurred: " + error.message;
