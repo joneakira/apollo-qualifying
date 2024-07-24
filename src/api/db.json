@@ -42,6 +42,60 @@
       "originEmail": "2",
       "targetEmail": "3",
       "amount": 10
+    },
+    {
+      "id": "dfca",
+      "originEmail": "ana@email.com",
+      "targetEmail": "Alice - alice@email.com",
+      "amount": 5000
+    },
+    {
+      "id": "c04d",
+      "originEmail": "alice@email.com",
+      "targetEmail": "Bob - bob@email.com",
+      "amount": 100
+    },
+    {
+      "id": "82f8",
+      "originEmail": "bob@email.com",
+      "targetEmail": "alice@email.com",
+      "amount": 399
+    },
+    {
+      "id": "8e0f",
+      "originEmail": "ana@email.com",
+      "targetEmail": "alice@email.com",
+      "amount": 435
+    },
+    {
+      "id": "68b6",
+      "originEmail": "bob@email.com",
+      "targetEmail": "joao@email.com",
+      "amount": 0
+    },
+    {
+      "id": "364a",
+      "originEmail": "bob@email.com",
+      "targetEmail": "joao@email.com",
+      "amount": 0
+    },
+    {
+      "id": "d3fe",
+      "originEmail": "bob@email.com",
+      "targetEmail": "joao@email.com",
+      "amount": 0
+    },
+    {
+      "id": "d8f2",
+      "originEmail": "bob@email.com",
+      "targetEmail": "joao@email.com",
+      "amount": 0
+    },
+    {
+      "id": "d479",
+      "originEmail": "ana@email.com",
+      "targetEmail": "bob@email.com",
+      "amount": 5432.28
     }
   ]
 }

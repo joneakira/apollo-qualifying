@@ -10,8 +10,7 @@ export function currencyFormatter(
   currency: string = "USD",
   locale: string = "en-US"
 ): string {
-  if (!value) return "--";
   return new Intl.NumberFormat(locale, { style: "currency", currency }).format(
-    value
+    value ?? 0
   );
 }

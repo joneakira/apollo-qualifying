@@ -9,6 +9,7 @@ import {
   notification,
   Select,
   Space,
+  Typography,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
@@ -33,17 +34,25 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
   const targetAccount = useMemo(() => {
     return accounts.find((ac) => ac.email === transaction?.targetEmail);
   }, [accounts, transaction?.targetEmail]);
+
   const {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<Transaction>({
     defaultValues: {
-      originEmail: targetAccount?.owner + " - " + targetAccount?.email,
-      targetEmail: undefined,
+      originEmail: undefined,
+      targetEmail: targetAccount?.email,
       amount: 0,
     },
   });
+
+  const originEmail = watch("originEmail");
+
+  const originAccount = useMemo(() => {
+    return accounts.find((ac) => ac.email === originEmail);
+  }, [accounts, originEmail]);
 
   const mutation = useMutation({
     mutationFn: async (transaction: Transaction) => {
@@ -94,6 +103,20 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
     setTransaction({
       ...data,
     });
+    if (originAccount?.balance && originAccount.balance < data.amount) {
+      notification.warning({
+        message: "Transaction Failed",
+        description: "Not enough balance.",
+      });
+      return;
+    }
+    if (data.amount <= 0) {
+      notification.warning({
+        message: "Transaction Failed",
+        description: "Invalid amount.",
+      });
+      return;
+    }
     mutation.mutate(data);
   };
   return (
@@ -124,12 +147,16 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
                   label: `${account.owner} - ${
                     account.email
                   } - ${currencyFormatter(account.balance)}`,
-                  value: account.id,
+                  value: account.email,
                 }))}
               />
             )}
           />
+          <Typography.Text>
+            <b>Balance:</b> {currencyFormatter(originAccount?.balance)}
+          </Typography.Text>
         </Form.Item>
+
         <Form.Item
           label="To Account"
           validateStatus={errors.targetEmail ? "error" : ""}
@@ -143,12 +170,15 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
               <Select
                 options={accounts?.map((account: Account) => ({
                   label: `${account.owner} - ${account.email}`,
-                  value: account.id,
+                  value: account.email,
                 }))}
                 {...field}
               />
             )}
           />
+          <Typography.Text>
+            <b>Balance:</b> {currencyFormatter(targetAccount?.balance)}
+          </Typography.Text>
         </Form.Item>
         <Form.Item
           label="Amount"
@@ -164,7 +194,7 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
                 {...field}
                 min={0}
                 disabled={!targetAccount}
-                max={targetAccount?.balance}
+                max={originAccount?.balance}
                 formatter={(value) =>
                   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
