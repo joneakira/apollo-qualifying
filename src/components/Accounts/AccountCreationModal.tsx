@@ -43,12 +43,12 @@ const AccountCreationModal: React.FC<AccountCreationModalProps> = () => {
       return apiInstance.post(endpoints.accounts, account);
     },
 
-    onSuccess: (data) => {
+    onSuccess: (data, account) => {
       queryClient.setQueryData(["accounts"], (oldData: any) => {
         if (oldData) {
-          return [...oldData, data];
+          return [...oldData, account];
         }
-        return [data];
+        return [account];
       });
 
       notification.success({
