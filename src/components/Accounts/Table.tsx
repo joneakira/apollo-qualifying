@@ -1,12 +1,16 @@
-import { Button, List, Space, Table, TableProps } from "antd";
+import { Button, Flex, Space, Table, TableProps, Typography } from "antd";
 import { Account } from "../../interfaces/account";
-import AccountTableRow from "./Row";
 import { tableStyles } from "../../styles/table";
-import { SendOutlined } from "@ant-design/icons";
+import {
+  ColumnWidthOutlined,
+  SendOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
 import { useIsFetching } from "@tanstack/react-query";
 import { accountsQueryKey } from "../../services/queryclient";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { currencyFormatter } from "../../utils/currencyFormatter";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   accounts: Account[];
@@ -33,9 +37,10 @@ const columns: TableProps<Account>["columns"] = [
     title: "Initial Balance",
     dataIndex: "initialBalance",
     key: "initialBalance",
+    render: (balance) => <b>{currencyFormatter(balance)}</b>,
   },
   {
-    title: "transfer",
+    title: "Actions",
     key: "action",
     render: (_, record) => (
       <Space size="middle">
@@ -46,20 +51,55 @@ const columns: TableProps<Account>["columns"] = [
     ),
   },
 ];
+
 const AccountsTable: React.FC<IProps> = (props) => {
   const { accounts } = props;
+  const [layoutWidth, setLayoutWidth] = useState<"wide" | "narrow">("narrow");
+  const navigate = useNavigate();
   const isFetching = useIsFetching({ queryKey: [accountsQueryKey] });
 
   const isLoading = useMemo(() => {
     return isFetching > 0;
   }, [isFetching]);
   return (
-    <Table
-      loading={isLoading}
-      dataSource={accounts}
-      columns={columns}
-      style={tableStyles}
-    />
+    <Flex
+      style={{
+        flexDirection: "column",
+        width: "100%",
+        maxWidth: layoutWidth === "narrow" ? "1024px" : "80%",
+      }}
+    >
+      <Flex
+        style={{
+          justifyContent: "space-between",
+          width: "100%%",
+          alignItems: "center",
+        }}
+      >
+        <Typography.Title>Accounts</Typography.Title>
+        <Space>
+          <Button
+            icon={<ColumnWidthOutlined />}
+            onClick={() =>
+              setLayoutWidth((prevState) =>
+                prevState === "narrow" ? "wide" : "narrow"
+              )
+            }
+          >
+            toggle {layoutWidth === "narrow" ? "wide" : "narrow"}
+          </Button>
+          <Button
+            loading={isLoading}
+            type="primary"
+            onClick={() => navigate("/create-account")}
+            icon={<UserAddOutlined />}
+          >
+            Account
+          </Button>
+        </Space>
+      </Flex>
+      <Table loading={isLoading} dataSource={accounts} columns={columns} />
+    </Flex>
   );
 };
 

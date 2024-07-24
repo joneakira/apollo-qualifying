@@ -7,7 +7,7 @@ import AccountTable from "./components/Accounts/Table";
 import { Outlet } from "react-router-dom";
 
 function App() {
-  const { data, error, isLoading } = useQuery<Account[]>({
+  const { data, error } = useQuery<Account[]>({
     queryKey: ["accounts"],
     queryFn: async () => {
       const response = await axios
@@ -21,7 +21,7 @@ function App() {
   return (
     <>
       <Layout className="App" style={{ alignItems: "center", width: "100%" }}>
-        <Header title="J. Akira Qualifying" buttonLabel="New user" />
+        <Header title="J. Akira Qualifying" />
         <AccountTable accounts={data ?? []} />
       </Layout>
       <Outlet />

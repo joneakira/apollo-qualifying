@@ -24,10 +24,8 @@ const AccountCreationModal: React.FC<AccountCreationModalProps> = () => {
     formState: { errors },
   } = useForm<Account>({
     defaultValues: {
-      id: 0,
       owner: "",
       email: "",
-      balance: 0,
       initialBalance: 0,
     },
   });
