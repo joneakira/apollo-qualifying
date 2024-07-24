@@ -34,78 +34,64 @@
       "email": "carlos@email.com",
       "initialBalance": 100.32,
       "balance": 100.32
-    },
-    {
-      "id": "4278",
-      "owner": "akira",
-      "email": "admin@gmail.com",
-      "initialBalance": 12222222,
-      "balance": 12222222
-    },
-    {
-      "id": "898f",
-      "owner": "akira23",
-      "email": "akira.ceo@akirasolutions.com",
-      "initialBalance": 53,
-      "balance": 53
     }
   ],
   "transactions": [
     {
-      "id": "25fd",
-      "originEmail": "admin@gmail.com",
-      "targetEmail": "alice@email.com",
-      "amount": 1000,
-      "accountId": "4278",
-      "date": "7/24/2024, 3:06:35 PM"
-    },
-    {
-      "id": "970e",
-      "originEmail": "admin@gmail.com",
-      "targetEmail": "alice@email.com",
-      "amount": 1000,
-      "accountId": "4278",
-      "date": "7/24/2024, 3:06:35 PM"
-    },
-    {
-      "id": "8b96",
-      "originEmail": "admin@gmail.com",
-      "targetEmail": "alice@email.com",
-      "amount": 1000,
-      "accountId": "4278",
-      "date": "7/24/2024, 3:06:36 PM"
-    },
-    {
-      "id": "f471",
-      "originEmail": "admin@gmail.com",
+      "id": "e2a1",
+      "originEmail": "carlos@email.com",
       "targetEmail": "alice@email.com",
       "amount": 100,
-      "accountId": "4278",
-      "date": "7/24/2024, 3:13:06 PM"
+      "accountId": "5",
+      "date": "7/24/2024, 3:29:55 PM"
     },
     {
-      "id": "4604",
-      "originEmail": "admin@gmail.com",
-      "targetEmail": "alice@email.com",
+      "id": "d17a",
+      "originEmail": "ana@email.com",
+      "targetEmail": "carlos@email.com",
       "amount": 100,
-      "accountId": "4278",
-      "date": "7/24/2024, 3:13:06 PM"
+      "accountId": "4",
+      "date": "7/24/2024, 3:30:23 PM"
     },
     {
-      "id": "b685",
-      "originEmail": "admin@gmail.com",
-      "targetEmail": "alice@email.com",
-      "amount": 100,
-      "accountId": "4278",
-      "date": "7/24/2024, 3:13:07 PM"
+      "id": "8051",
+      "originEmail": "ana@email.com",
+      "targetEmail": "joao@email.com",
+      "amount": 1999,
+      "accountId": "4",
+      "date": "7/24/2024, 3:30:39 PM"
     },
     {
-      "id": "5415",
-      "originEmail": "admin@gmail.com",
+      "id": "0cb1",
+      "originEmail": "joao@email.com",
+      "targetEmail": "alice@email.com",
+      "amount": 3,
+      "accountId": "3",
+      "date": "7/24/2024, 3:31:02 PM"
+    },
+    {
+      "id": "3423",
+      "originEmail": "alice@email.com",
+      "targetEmail": "joao@email.com",
+      "amount": 10,
+      "accountId": "1",
+      "date": "7/24/2024, 3:32:54 PM"
+    },
+    {
+      "id": "897c",
+      "originEmail": "joao@email.com",
+      "targetEmail": "joao@email.com",
+      "amount": 2000,
+      "accountId": "3",
+      "date": "7/24/2024, 3:35:26 PM"
+    },
+    {
+      "id": "d31c",
+      "originEmail": "bob@email.com",
       "targetEmail": "alice@email.com",
       "amount": 100,
-      "accountId": "4278",
-      "date": "7/24/2024, 3:13:08 PM"
+      "accountId": "2",
+      "date": "7/24/2024, 3:41:56 PM"
     }
   ]
 }

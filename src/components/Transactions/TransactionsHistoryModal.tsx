@@ -5,7 +5,7 @@ import {
   queryClient,
   transactionsQueryKey,
 } from "../../services/queryclient";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Transaction } from "../../interfaces/transaction";
 import { Account } from "../../interfaces/account";
 import { currencyFormatter } from "../../utils/currencyFormatter";
@@ -46,12 +46,19 @@ const TransactionsHistoryModal: React.FC<
       );
     }
     return [];
-  }, [account, transactions]);
+  }, [accountIncomeTransactions]);
 
   const transactionsResult = useMemo(() => {
     return accountIncomeTransactions.concat(accountOutcomeTransactions);
   }, [accountOutcomeTransactions, accountIncomeTransactions]);
-
+  const isOutcome = useCallback(
+    (item: Transaction) => {
+      return accountOutcomeTransactions.some(
+        (t) => t.id === item.id && t.accountId === item.accountId
+      );
+    },
+    [accountOutcomeTransactions]
+  );
   return (
     <>
       <Modal
@@ -69,26 +76,13 @@ const TransactionsHistoryModal: React.FC<
               <List.Item.Meta
                 title={
                   <Typography.Text>
-                    {accountOutcomeTransactions.some(
-                      (t) => t.id === item.id
-                    ) ? (
-                      <b>To:</b>
-                    ) : (
-                      <b>From:</b>
-                    )}{" "}
-                    {item.originEmail}
+                    {!isOutcome(item) ? <b>From:</b> : <b>To:</b>}{" "}
+                    {isOutcome(item) ? item.targetEmail : item.originEmail}
                   </Typography.Text>
                 }
                 description={<Typography.Text>{item.date}</Typography.Text>}
               />
-              <Typography.Text
-                style={{}}
-                type={
-                  accountIncomeTransactions.some((t) => t.id === item.id)
-                    ? "danger"
-                    : "success"
-                }
-              >
+              <Typography.Text type={isOutcome(item) ? "danger" : "success"}>
                 {`${currencyFormatter(item.amount)}`}
               </Typography.Text>
             </List.Item>

@@ -13,7 +13,11 @@ import {
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
-import { accountsQueryKey, queryClient } from "../../services/queryclient";
+import {
+  accountsQueryKey,
+  queryClient,
+  transactionsQueryKey,
+} from "../../services/queryclient";
 import { Account } from "../../interfaces/account";
 import { Transaction } from "../../interfaces/transaction";
 import { currencyFormatter } from "../../utils/currencyFormatter";
@@ -65,11 +69,18 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
-        ["accounts"],
-        (oldData: Account[] | undefined) => {
-          if (!oldData) return oldData;
+        [transactionsQueryKey],
+        (prev: Transaction[] | undefined) => {
+          if (!prev) return [{ ...data }];
+          return prev.concat([{ ...data }]);
+        }
+      );
+      queryClient.setQueryData(
+        [accountsQueryKey],
+        (prev: Account[] | undefined) => {
+          if (!prev) return prev;
 
-          return oldData.map((account) => {
+          return prev.map((account) => {
             if (account.email === variables.originEmail) {
               return {
                 ...account,
@@ -110,6 +121,13 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
       date: new Date().toLocaleString(),
     };
     setTransaction(formattedData);
+    if (originAccount?.email === targetAccount?.email) {
+      notification.warning({
+        message: "Transaction Failed",
+        description: "Cannot send money to the same account.",
+      });
+      return;
+    }
     if (originAccount?.balance && originAccount.balance < data.amount) {
       notification.warning({
         message: "Transaction Failed",
