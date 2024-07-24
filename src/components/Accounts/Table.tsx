@@ -125,13 +125,6 @@ const AccountsTable: React.FC<IProps> = (props) => {
   const isLoading = useMemo(() => {
     return isFetching > 0;
   }, [isFetching]);
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const targetEmail = params.get("targetEmail");
-  //   if (targetEmail) {
-  //     setTransaction((prev) => (prev ? { ...prev, targetEmail } : { targetEmail, amount: 0 }));
-  //   }
-  // }, [location.search, setTransaction]);
 
   return (
     <Flex
@@ -148,7 +141,9 @@ const AccountsTable: React.FC<IProps> = (props) => {
           alignItems: "center",
         }}
       >
-        <Typography.Title>Accounts</Typography.Title>
+        <Typography.Title style={{ fontSize: "20px" }}>
+          Accounts
+        </Typography.Title>
         <Space>
           <Button
             icon={<ColumnWidthOutlined />}
