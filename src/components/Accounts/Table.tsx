@@ -1,4 +1,12 @@
-import { Button, Flex, Space, Table, TableProps, Typography } from "antd";
+import {
+  Button,
+  Flex,
+  Space,
+  Table,
+  TableProps,
+  Tooltip,
+  Typography,
+} from "antd";
 import { Account } from "../../interfaces/account";
 import { tableStyles } from "../../styles/table";
 import {
@@ -11,6 +19,7 @@ import { accountsQueryKey } from "../../services/queryclient";
 import { useMemo, useState } from "react";
 import { currencyFormatter } from "../../utils/currencyFormatter";
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 interface IProps {
   accounts: Account[];
@@ -21,16 +30,11 @@ const columns: TableProps<Account>["columns"] = [
     dataIndex: "owner",
     key: "owner",
     render: (text, record) => (
-      <Space style={{ flexDirection: "column", alignItems: "left" }}>
+      <Space style={{ flexDirection: "column", alignItems: "flex-start" }}>
         <Typography.Text>{text}</Typography.Text>
         <Typography.Link>{record.email}</Typography.Link>
       </Space>
     ),
-  },
-  {
-    title: "e-mail",
-    dataIndex: "email",
-    key: "email",
   },
   {
     title: "Balance",
@@ -38,6 +42,7 @@ const columns: TableProps<Account>["columns"] = [
     key: "balance",
     render: (balance) => <b>{currencyFormatter(balance)}</b>,
   },
+
   {
     title: "Initial Balance",
     dataIndex: "initialBalance",
@@ -45,8 +50,19 @@ const columns: TableProps<Account>["columns"] = [
     render: (balance) => <b>{currencyFormatter(balance)}</b>,
   },
   {
+    title: "From To",
+    render: (record) => (
+      <React.Fragment>
+        {record.from}
+        <br />
+        {record.to}
+      </React.Fragment>
+    ),
+    responsive: ["xs"],
+  },
+  {
     title: "Actions",
-    key: "action",
+    key: "from",
     render: (_, record) => (
       <Space size="middle">
         <Button icon={<SendOutlined />} type="primary">
@@ -54,11 +70,25 @@ const columns: TableProps<Account>["columns"] = [
         </Button>
       </Space>
     ),
+    responsive: ["lg"],
+  },
+  {
+    title: "Actions",
+    dataIndex: "to",
+    render: (_, record) => (
+      <Space size="middle">
+        <Tooltip title="Transfer">
+          <Button icon={<SendOutlined />} type="primary"></Button>
+        </Tooltip>
+      </Space>
+    ),
+    responsive: ["xs"],
   },
 ];
 
 const AccountsTable: React.FC<IProps> = (props) => {
   const { accounts } = props;
+
   const [layoutWidth, setLayoutWidth] = useState<"wide" | "narrow">("narrow");
   const navigate = useNavigate();
   const isFetching = useIsFetching({ queryKey: [accountsQueryKey] });
