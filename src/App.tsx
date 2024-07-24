@@ -1,33 +1,32 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { List, Button } from "antd";
+import { List, Button, Layout } from "antd";
+import { Account } from "./interfaces/account";
+import { Header } from "./components/header";
+import AccountTable from "./components/Accounts/Table";
+import { Outlet } from "react-router-dom";
+
 function App() {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<Account[]>({
     queryKey: ["accounts"],
-    queryFn: () => {
-      const response = axios.get("http://localhost:5000/accounts");
+    queryFn: async () => {
+      const response = await axios
+        .get<Account[]>("http://localhost:5000/accounts")
+        .then((res) => res.data);
       return response;
     },
   });
+
   if (isLoading) return "Loading...";
   if (error) return "An error has occurred: " + error.message;
   return (
-    <div className="App">
-      <Button type="primary">Add</Button>
-      <List
-        itemLayout="horizontal"
-        dataSource={data.data}
-        renderItem={(item) => (
-          <List.Item>
-            <List.Item.Meta
-              title={<a href="https://ant.design">{item.owner}</a>}
-              description={`Balance: $${item.balance}`}
-            />
-            <Button type="primary">Transfer</Button>
-          </List.Item>
-        )}
-      />
-    </div>
+    <>
+      <Layout className="App" style={{ alignItems: "center", width: "100%" }}>
+        <Header title="Qualifying" buttonLabel="New user" />
+        <AccountTable accounts={data ?? []} />
+      </Layout>
+      <Outlet />
+    </>
   );
 }
 export default App;
