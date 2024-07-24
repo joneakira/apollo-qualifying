@@ -16,14 +16,48 @@ import {
 } from "@ant-design/icons";
 import { useIsFetching } from "@tanstack/react-query";
 import { accountsQueryKey } from "../../services/queryclient";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { currencyFormatter } from "../../utils/currencyFormatter";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import NewTransactionModal from "../Transactions/NewTransactionModal";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { recoilTransactionAccounts } from "../../app/atoms";
 
 interface IProps {
   accounts: Account[];
 }
+
+const BeginTransaction = ({
+  mobile,
+  account,
+}: {
+  mobile: boolean;
+  account: Account;
+}) => {
+  const setTransaction = useSetRecoilState(recoilTransactionAccounts);
+  const setTargetEmail = () => {
+    // console.log(account);
+    setTransaction((prev) =>
+      prev
+        ? { ...prev, targetEmail: account.email }
+        : { targetEmail: account.email, amount: 0 }
+    );
+  };
+  return mobile ? (
+    <Tooltip title="Transfer">
+      <Button
+        icon={<SendOutlined />}
+        onClick={setTargetEmail}
+        type="primary"
+      ></Button>
+    </Tooltip>
+  ) : (
+    <Button icon={<SendOutlined />} onClick={setTargetEmail} type="primary">
+      Transfer
+    </Button>
+  );
+};
 const columns: TableProps<Account>["columns"] = [
   {
     title: "Name",
@@ -52,25 +86,13 @@ const columns: TableProps<Account>["columns"] = [
   {
     title: "Actions",
     key: "from",
-    render: (_, record) => (
-      <Space size="middle">
-        <Button icon={<SendOutlined />} type="primary">
-          Transfer
-        </Button>
-      </Space>
-    ),
+    render: (_, record) => <BeginTransaction mobile={false} account={record} />,
     responsive: ["sm"],
   },
   {
     title: "Actions",
     dataIndex: "to",
-    render: (_, record) => (
-      <Space size="middle">
-        <Tooltip title="Transfer">
-          <Button icon={<SendOutlined />} type="primary"></Button>
-        </Tooltip>
-      </Space>
-    ),
+    render: (_, record) => <BeginTransaction mobile account={record} />,
     responsive: ["xs"],
   },
 ];
@@ -79,12 +101,18 @@ const AccountsTable: React.FC<IProps> = (props) => {
   const { accounts } = props;
 
   const [layoutWidth, setLayoutWidth] = useState<"wide" | "narrow">("narrow");
+  const [transaction, setTransaction] = useRecoilState(
+    recoilTransactionAccounts
+  );
   const navigate = useNavigate();
   const isFetching = useIsFetching({ queryKey: [accountsQueryKey] });
 
   const isLoading = useMemo(() => {
     return isFetching > 0;
   }, [isFetching]);
+  useEffect(() => {
+    console.log(transaction);
+  }, [transaction]);
 
   return (
     <Flex
@@ -124,6 +152,7 @@ const AccountsTable: React.FC<IProps> = (props) => {
         </Space>
       </Flex>
       <Table loading={isLoading} dataSource={accounts} columns={columns} />
+      {transaction?.targetEmail && <NewTransactionModal />}
     </Flex>
   );
 };

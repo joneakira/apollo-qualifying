@@ -15,26 +15,35 @@ import { Controller, useForm } from "react-hook-form";
 import { accountsQueryKey, queryClient } from "../../services/queryclient";
 import { Account } from "../../interfaces/account";
 import { Transaction } from "../../interfaces/transaction";
+import { currencyFormatter } from "../../utils/currencyFormatter";
+import { useRecoilState } from "recoil";
+import { recoilTransactionAccounts } from "../../app/atoms";
+import { useMemo } from "react";
 
 interface NewTransactionModalProps {}
 
 const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
   const navigate = useNavigate();
+  const accounts: Account[] =
+    queryClient.getQueryData([accountsQueryKey]) || [];
 
+  const [transaction, setTransaction] = useRecoilState(
+    recoilTransactionAccounts
+  );
+  const targetAccount = useMemo(() => {
+    return accounts.find((ac) => ac.email === transaction?.targetEmail);
+  }, [accounts, transaction?.targetEmail]);
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<Transaction>({
     defaultValues: {
-      originEmail: undefined,
+      originEmail: targetAccount?.owner + " - " + targetAccount?.email,
       targetEmail: undefined,
       amount: 0,
     },
   });
-
-  const accounts: Account[] =
-    queryClient.getQueryData([accountsQueryKey]) || [];
 
   const mutation = useMutation({
     mutationFn: async (transaction: Transaction) => {
@@ -82,13 +91,16 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
   });
 
   const onSubmit = (data: Transaction) => {
+    setTransaction({
+      ...data,
+    });
     mutation.mutate(data);
   };
   return (
     <Modal
       open
       title="New Transaction"
-      onCancel={() => navigate("/")}
+      onCancel={() => setTransaction(undefined)}
       footer={null}
     >
       <Form
@@ -109,7 +121,9 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
               <Select
                 {...field}
                 options={accounts?.map((account: Account) => ({
-                  label: `${account.owner} - ${account.email}`,
+                  label: `${account.owner} - ${
+                    account.email
+                  } - ${currencyFormatter(account.balance)}`,
                   value: account.id,
                 }))}
               />
@@ -127,11 +141,11 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
             rules={{ required: "To Account is required" }}
             render={({ field }) => (
               <Select
-                {...field}
                 options={accounts?.map((account: Account) => ({
                   label: `${account.owner} - ${account.email}`,
                   value: account.id,
                 }))}
+                {...field}
               />
             )}
           />
@@ -149,6 +163,8 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = () => {
               <InputNumber
                 {...field}
                 min={0}
+                disabled={!targetAccount}
+                max={targetAccount?.balance}
                 formatter={(value) =>
                   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
